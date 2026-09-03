@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: postpilot-brand-studio
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: HOST
+        value: 0.0.0.0
+      - key: VIDEO_PROVIDER
+        value: ark
+      - key: MAX_RETRIES
+        value: 2
+      - key: ARK_BASE_URL
+        value: https://ark.cn-beijing.volces.com/api/v3
+      - key: ARK_MODEL
+        value: doubao-seedance-2-0-260128
+      - key: ARK_IMAGE_MODEL
+        value: doubao-seedream-5-0-pro-260628
+      - key: LLM_BASE_URL
+        value: https://ark.cn-beijing.volces.com/api/v3
+      - key: LLM_MODEL
+        value: deepseek-v4-pro-ga-260813
+      - key: ARK_API_KEY
+        sync: false
+      - key: LLM_API_KEY
+        sync: false
