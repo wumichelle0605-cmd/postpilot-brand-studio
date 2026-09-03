@@ -1,4 +1,4 @@
-# PostPilot 一键视频工作流
+# PostPilot Brand Studio / 品牌运营作品生成器
 
 把一句社媒选题自动转换为脚本，再生成社媒图片或视频。图片通过 Ark Seedream 生成并自动下载到本地；视频可调用 Ark/Fal Seedance，或用通用适配器连接即梦/企业网关。
 
