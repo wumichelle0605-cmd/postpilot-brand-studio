@@ -38,6 +38,10 @@ const server = http.createServer(async (req, res) => {
       const types = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8" };
       return send(res, 200, await fs.readFile(path.join(root, name), "utf8"), types[path.extname(name)]);
     }
+    if (req.method === "GET" && url.pathname === "/demo-pearl.jpeg") {
+      const data = await fs.readFile(path.join(root, "demo-pearl.jpeg"));
+      res.writeHead(200, { "content-type": "image/jpeg", "cache-control": "public, max-age=86400" }); return res.end(data);
+    }
     if (req.method === "GET" && url.pathname.startsWith("/outputs/generated/")) {
       const name = path.basename(url.pathname); const data = await fs.readFile(path.resolve("outputs", "generated", name));
       res.writeHead(200, { "content-type": "image/jpeg", "cache-control": "public, max-age=31536000, immutable" }); return res.end(data);
