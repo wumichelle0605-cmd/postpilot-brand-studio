@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { validateRequest, validatePrompt, renderVideoPrompt } from "../src/schema.js";
 import { createJob, run, prepare, generate, refineImage } from "../src/workflow.js";
+import { writeScript } from "../src/script-writer.js";
 
 test("request defaults to vertical 720p", () => {
   const r = validateRequest({ brief: "做一条咖啡产品视频" });
@@ -31,4 +32,13 @@ test("interactive workflow waits for confirmation", async () => {
   assert.equal(job.result.metadata.prompt, "这是商家修改后的完整图片制作稿");
   await refineImage(job, "背景更明亮，主体放大"); assert.equal(job.state, "completed");
   assert.match(job.result.metadata.prompt, /背景更明亮/);
+});
+test("publishing kit uses platform-native pearl commute copy", async () => {
+  const old = { url: process.env.LLM_BASE_URL, key: process.env.LLM_API_KEY, model: process.env.LLM_MODEL };
+  delete process.env.LLM_BASE_URL; delete process.env.LLM_API_KEY; delete process.env.LLM_MODEL;
+  const script = await writeScript(validateRequest({ brief:"为通勤都市女性制作珍珠项链种草图，突出日常好搭配", platform:"小红书", outputType:"image" }));
+  assert.equal(script.contentPackage.title, "通勤穿搭总差一点？原来是一条珍珠项链✨");
+  assert.match(script.contentPackage.caption, /白衬衫/);
+  assert.doesNotMatch(script.contentPackage.tags.join(" "), /平台运营|品牌内容|电商视觉/);
+  if (old.url) process.env.LLM_BASE_URL = old.url; if (old.key) process.env.LLM_API_KEY = old.key; if (old.model) process.env.LLM_MODEL = old.model;
 });
